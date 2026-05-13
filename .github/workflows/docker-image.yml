@@ -21,7 +21,7 @@ jobs:
       - name: Install Dependencies
         run: |
           cd CI-CD/student-management-system
-          npm ci
+          npm install   # <-- Changed from 'npm ci'
 
       - name: Build Project
         run: |
