@@ -18,20 +18,20 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Install Dependencies (optional, if you build)
+      - name: Install Dependencies
         run: |
-          cd student-management-system
+          cd CI-CD/student-management-system
           npm ci
 
-      - name: Build Project (optional)
+      - name: Build Project
         run: |
-          cd student-management-system
+          cd CI-CD/student-management-system
           npm run build
 
       - name: Create ZIP Deployment Package
         run: |
-          cd student-management-system
-          zip -r ../deploy.zip . \
+          cd CI-CD/student-management-system
+          zip -r ../../deploy.zip . \
             -x "*.git*" \
             -x "node_modules/*"
 
