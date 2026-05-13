@@ -13,29 +13,37 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Setup Node (optional, remove if not needed)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install Dependencies (optional, if you build)
+        run: |
+          cd student-management-system
+          npm ci
+
+      - name: Build Project (optional)
+        run: |
+          cd student-management-system
+          npm run build
+
       - name: Create ZIP Deployment Package
         run: |
           cd student-management-system
           zip -r ../deploy.zip . \
             -x "*.git*" \
             -x "node_modules/*"
+
       - name: Deploy to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v22
-
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           application_name: ${{ secrets.EB_APPLICATION_NAME }}
           environment_name: ${{ secrets.EB_ENVIRONMENT_NAME }}
           region: ${{ secrets.AWS_REGION }}
-
-          # Unique version every deployment
           version_label: github-action-${{ github.sha }}
-
           deployment_package: deploy.zip
-
-          # Prevent duplicate version errors
           use_existing_version_if_available: true
-
-          # Wait for deployment to complete
           wait_for_deployment: true
